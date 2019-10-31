@@ -19,12 +19,17 @@ class BasicSimulation extends Simulation {
         .body(RawFileBody("payload.json")).asJson
     )
 
+    val findAllCustomers: ChainBuilder = exec(
+      http("FindAllCustomersEndpoint")
+        .get("/customers")
+    )
+
   }
 
-  val sampleScenario: ScenarioBuilder = scenario("sampleScenario").exec(CustomerController.newCustomer)
+  val sampleScenario: ScenarioBuilder = scenario("sampleScenario").exec(CustomerController.findAllCustomers)
 
   setUp(
-    sampleScenario.inject(atOnceUsers(10000))
+    sampleScenario.inject(atOnceUsers(100))
       .protocols(httpProtocol)
   )
 
